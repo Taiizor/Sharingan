@@ -2,6 +2,7 @@ using Sharingan.Abstractions;
 using Sharingan.Internal;
 using Sharingan.Serialization;
 using System.Collections.Concurrent;
+using Tomlyn;
 using Tomlyn.Model;
 
 namespace Sharingan.Providers.Toml;
@@ -296,8 +297,11 @@ public class TomlFileSettingsProvider : ISettingsProvider
                 return;
             }
 
-            TomlTable model = Tomlyn.Toml.ToModel(toml);
-            FlattenTable(model, string.Empty);
+            TomlTable? model = TomlSerializer.Deserialize<TomlTable>(toml);
+            if (model != null)
+            {
+                FlattenTable(model, string.Empty);
+            }
         }
         catch { /* Ignore parse errors */ }
         _isDirty = false;
@@ -331,7 +335,7 @@ public class TomlFileSettingsProvider : ISettingsProvider
             SetNestedValue(table, kvp.Key.Split('.'), kvp.Value);
         }
 
-        string toml = Tomlyn.Toml.FromModel(table);
+        string toml = TomlSerializer.Serialize(table);
 
         if (_options.UseAtomicWrites)
         {

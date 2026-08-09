@@ -9,7 +9,8 @@
         <DefaultLanguage>en-GB</DefaultLanguage>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <NoWarn>$(NoWarn);CS1591;CS0067;CS8603;CS8601;CS8602</NoWarn>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        <NoWarn>$(NoWarn);CS1591;CS0067;CS8603;CS8601;CS8602;NU5104</NoWarn>
     </PropertyGroup>
 
     <!-- Package metadata -->

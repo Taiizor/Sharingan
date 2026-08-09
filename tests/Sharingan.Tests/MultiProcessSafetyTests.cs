@@ -9,7 +9,7 @@ namespace Sharingan.Tests;
 public class MultiProcessSafetyTests
 {
     [Fact]
-    public void ConcurrentWrites_ShouldNotLoseData()
+    public async Task ConcurrentWrites_ShouldNotLoseData()
     {
         // Arrange
         using InMemorySettingsProvider provider = new();
@@ -23,7 +23,7 @@ public class MultiProcessSafetyTests
             string value = $"value{i}";
             tasks.Add(Task.Run(() => provider.Set(key, value)));
         }
-        Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(tasks);
 
         // Assert - All keys should be present
         Assert.Equal(keyCount, provider.Count);
@@ -34,7 +34,7 @@ public class MultiProcessSafetyTests
     }
 
     [Fact]
-    public void ConcurrentReadsAndWrites_ShouldBeThreadSafe()
+    public async Task ConcurrentReadsAndWrites_ShouldBeThreadSafe()
     {
         // Arrange
         using InMemorySettingsProvider provider = new();
@@ -55,14 +55,14 @@ public class MultiProcessSafetyTests
                 _ = provider.Get("shared", 0);
             }));
         }
-        Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(tasks);
 
         // Assert - Should complete without exceptions
         Assert.True(provider.ContainsKey("shared"));
     }
 
     [Fact]
-    public void ConcurrentReload_ShouldNotThrow()
+    public async Task ConcurrentReload_ShouldNotThrow()
     {
         // Arrange
         using InMemorySettingsProvider provider = new();
@@ -75,7 +75,7 @@ public class MultiProcessSafetyTests
             tasks.Add(Task.Run(provider.Reload));
             tasks.Add(Task.Run(() => provider.Set($"key{i}", $"value{i}")));
         }
-        Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(tasks);
 
         // Assert - Should complete without exceptions
         Assert.True(true);
@@ -102,7 +102,7 @@ public class MultiProcessSafetyTests
     }
 
     [Fact]
-    public void ClearDuringWrites_ShouldNotThrow()
+    public async Task ClearDuringWrites_ShouldNotThrow()
     {
         // Arrange
         using InMemorySettingsProvider provider = new();
@@ -131,7 +131,7 @@ public class MultiProcessSafetyTests
             }));
         }
 
-        try { Task.WaitAll(tasks.ToArray()); } catch (AggregateException) { }
+        try { await Task.WhenAll(tasks); } catch (Exception) { }
         cts.Cancel();
 
         // Assert - Should complete without deadlock

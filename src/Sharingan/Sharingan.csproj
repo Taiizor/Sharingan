@@ -13,13 +13,13 @@
 
     <!-- Polyfills for older frameworks -->
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net48' Or '$(TargetFramework)' == 'net481'">
-        <PackageReference Include="System.Text.Json" Version="10.0.10" />
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.10" />
         <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+        <PackageReference Include="System.Text.Json" Version="11.0.0-preview.6.26359.118" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="11.0.0-preview.6.26359.118" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-        <PackageReference Include="System.Text.Json" Version="10.0.10" />
+        <PackageReference Include="System.Text.Json" Version="11.0.0-preview.6.26359.118" />
     </ItemGroup>
 
 </Project>

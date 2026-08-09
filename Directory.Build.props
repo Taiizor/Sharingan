@@ -14,7 +14,7 @@
 
     <!-- Package metadata -->
     <PropertyGroup>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
         <Authors>Taiizor</Authors>
         <Owners>$(Authors)</Owners>
         <Company>$(Authors)</Company>
